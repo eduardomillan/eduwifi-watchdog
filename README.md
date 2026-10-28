@@ -36,6 +36,8 @@ device), it stays quiet until you turn it back on.
 - Linux with systemd and NetworkManager (`nmcli`)
 - bash, iproute2 (`ip`), `ping`
 - Root access for installing and for the recovery steps
+- The Wi-Fi networks to watch saved in NetworkManager, available to all users and with the
+  password stored by the system (see [Choosing the networks to watch](#choosing-the-networks-to-watch))
 
 Tested on LliureX 23 (Ubuntu 22.04 based), kernel 6.8, NetworkManager 1.36.
 
@@ -50,25 +52,83 @@ sudo ./install.sh
 ```
 
 The installer requires root. It autodetects the Wi-Fi interface, its kernel module and its USB
-ID, offers them as defaults, lists the Wi-Fi networks saved in NetworkManager and asks which ones
-to retry, **comma-separated and in priority order**, for example:
+ID and offers them as defaults (just press Enter to accept them). Then it lists the Wi-Fi networks
+saved in NetworkManager and asks which ones to watch — see
+[Choosing the networks to watch](#choosing-the-networks-to-watch) below, it is the most
+important setting.
+
+It then writes `/etc/eduwifi-watchdog.conf`, installs the script to
+`/usr/local/sbin/eduwifi-watchdog.sh` (with an `eduwifi-watchdog` command in `/usr/local/bin`) and
+enables `eduwifi-watchdog.timer`.
+
+Running the installer again updates the installation and offers the current settings as
+defaults.
+
+## Choosing the networks to watch
+
+The watchdog reconnects to the networks listed in `NETWORKS`, trying them **one by one, in the
+order given**, and stops at the first one that works. Put your preferred network first, for
+example the 5 GHz band of your router and then its 2.4 GHz band as a fallback.
+
+### 1. Make sure each network is saved in NetworkManager
+
+The watchdog does not store Wi-Fi passwords: it can only connect to networks that NetworkManager
+already knows. Connect to each network once from the desktop or with `nmcli`.
+
+Because the watchdog runs as root from a systemd timer, without your desktop session, the
+password must be **available to all users and stored by the system**, not only in your personal
+keyring. Otherwise the reconnection fails with a `no-secrets` error. In the NetworkManager GUI
+this is the "All users may connect to this network" option plus "Store the password for all
+users (not encrypted)". From a terminal:
+
+```sh
+nmcli connection modify "MyNetwork-5G" connection.permissions "" \
+    802-11-wireless-security.psk-flags 0 802-11-wireless-security.psk "<password>"
+```
+
+Check it with `nmcli -g connection.permissions,802-11-wireless-security.psk-flags connection show "MyNetwork-5G"`:
+an empty first line (all users) and `0` (stored by the system) mean it is ready.
+
+### 2. Use the NetworkManager profile name, not necessarily the SSID
+
+`NETWORKS` takes the **name of the connection profile**, which may differ from the SSID (for
+example `MyNetwork 1`). List the exact names with:
+
+```sh
+nmcli -f NAME,TYPE connection show | grep wifi
+```
+
+### 3. Give them to the installer
+
+When asked, type the names comma-separated, in priority order:
 
 ```
+Wi-Fi networks saved in NetworkManager:
+  - MyNetwork
+  - MyNetwork-5G
 Networks to retry, comma-separated, in priority order []: MyNetwork-5G,MyNetwork
 ```
 
-It then writes `/etc/eduwifi-watchdog.conf`, installs the script to
-`/usr/local/sbin/eduwifi-watchdog.sh` (with a `eduwifi-watchdog` command in `/usr/local/bin`) and
-enables `eduwifi-watchdog.timer`.
-
-For a non-interactive install, pass the networks on the command line:
+Or pass them on the command line for a non-interactive install:
 
 ```sh
 sudo ./install.sh --networks "MyNetwork-5G,MyNetwork"
 ```
 
-Running the installer again updates the installation and offers the current settings as
-defaults.
+The installer warns about any name that is not a saved NetworkManager profile. Leaving the list
+empty lets NetworkManager choose the network by itself.
+
+### 4. Change them later
+
+Either run `sudo ./install.sh` again (it offers the current list as the default), or edit the
+`NETWORKS=` line in `/etc/eduwifi-watchdog.conf`:
+
+```sh
+NETWORKS="MyNetwork-5G,MyNetwork,Office"
+```
+
+Changes take effect at the next check; nothing needs restarting. Check which networks are in use
+with `eduwifi-watchdog status`.
 
 ## Configuration
 
