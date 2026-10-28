@@ -1,0 +1,7 @@
+[Unit]
+Description=Wi-Fi watchdog check
+After=NetworkManager.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/eduwifi-watchdog.sh

@@ -1,0 +1,25 @@
+# eduwifi-watchdog configuration. install.sh generates /etc/eduwifi-watchdog.conf from these settings.
+
+# Wi-Fi interface to monitor
+IFACE=wlan0
+
+# NetworkManager profiles to reconnect to, comma-separated, in priority order.
+# Empty = let NetworkManager choose (nmcli device connect).
+NETWORKS="MyNetwork-5G,MyNetwork"
+
+# Kernel module to reload when reconnecting is not enough (empty = never reload).
+# Find it with: basename "$(readlink -f /sys/class/net/wlan0/device/driver/module)"
+MODULE=rtw88_8822bu
+
+# vendor:product of the USB adapter for the software reset (empty = no USB reset).
+# Find it with: lsusb
+USB_ID=0bda:b812
+
+# Consecutive failed checks (one per minute) before acting
+FAILS_NEEDED=2
+
+# Max module reloads / USB resets per hour
+MAX_HARD_PER_HOUR=3
+
+# Seconds to wait for each connection attempt
+CONNECT_TIMEOUT=30
