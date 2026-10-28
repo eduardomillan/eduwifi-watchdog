@@ -41,8 +41,10 @@ Tested on LliureX 23 (Ubuntu 22.04 based), kernel 6.8, NetworkManager 1.36.
 
 ## Installation
 
+Clone this repository (or download it as a ZIP and extract it), then run the installer from its
+folder:
+
 ```sh
-git clone https://github.com/<user>/eduwifi-watchdog.git
 cd eduwifi-watchdog
 sudo ./install.sh
 ```
