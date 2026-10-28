@@ -38,6 +38,9 @@ device), it stays quiet until you turn it back on.
 - Root access for installing and for the recovery steps
 - The Wi-Fi networks to watch saved in NetworkManager, available to all users and with the
   password stored by the system (see [Choosing the networks to watch](#choosing-the-networks-to-watch))
+- Optional: `gettext` (provides `msgfmt`) to install the translations; without it everything is
+  installed in English
+- Optional, for the menu entry: `kdialog` (KDE) or `zenity`, `notify-send` and `pkexec`
 
 Tested on LliureX 23 (Ubuntu 22.04 based), kernel 6.8, NetworkManager 1.36.
 
@@ -58,8 +61,10 @@ saved in NetworkManager and asks which ones to watch — see
 important setting.
 
 It then writes `/etc/eduwifi-watchdog.conf`, installs the script to
-`/usr/local/sbin/eduwifi-watchdog.sh` (with an `eduwifi-watchdog` command in `/usr/local/bin`) and
-enables `eduwifi-watchdog.timer`.
+`/usr/local/sbin/eduwifi-watchdog.sh` (with an `eduwifi-watchdog` command in `/usr/local/bin`),
+enables `eduwifi-watchdog.timer`, adds the **Wi-Fi watchdog** entry to the applications menu and
+installs the translations (see [Desktop menu entry](#desktop-menu-entry) and
+[Translations](#translations)).
 
 Running the installer again updates the installation and offers the current settings as
 defaults.
@@ -151,18 +156,34 @@ Changes take effect at the next check; no restart is needed.
 All features are subcommands of the same script. The installer creates the `eduwifi-watchdog`
 command (a symlink in `/usr/local/bin`), so they can be used from anywhere.
 
-| Command                                | What it does                                                                                     | Root? |
-|----------------------------------------|--------------------------------------------------------------------------------------------------|-------|
-| `eduwifi-watchdog status`                 | Wi-Fi state, whether the watchdog is active or paused, the timer, the settings and the last 10 events | no    |
-| `eduwifi-watchdog disconnect`             | Disconnects the Wi-Fi manually; the watchdog won't reconnect it                                  | no    |
-| `eduwifi-watchdog off`                    | Turns the Wi-Fi radio off; it stays off even after a reboot                                      | no    |
-| `eduwifi-watchdog on`                     | Turns the Wi-Fi on, re-enables autoconnect and connects to your networks in priority order       | no    |
-| `sudo eduwifi-watchdog test`              | Automatic recovery test (see below)                                                              | yes   |
-| `sudo eduwifi-watchdog` (or `check`)      | The check the timer runs every minute                                                            | yes   |
-| `eduwifi-watchdog --help`                 | Shows all commands and options                                                                   | no    |
+| Command                                | What it does                                                                                          | Root? |
+|----------------------------------------|-------------------------------------------------------------------------------------------------------|-------|
+| `eduwifi-watchdog status`              | Wi-Fi state, whether the watchdog is active or paused, the timer, the settings and the last 10 events | no    |
+| `eduwifi-watchdog disconnect`          | Disconnects the Wi-Fi manually; the watchdog won't reconnect it                                       | no    |
+| `eduwifi-watchdog off`                 | Turns the Wi-Fi radio off; it stays off even after a reboot                                           | no    |
+| `eduwifi-watchdog on`                  | Turns the Wi-Fi on, re-enables autoconnect and connects to your networks in priority order            | no    |
+| `eduwifi-watchdog gui [ACTION]`        | Desktop dialog used by the menu entry (see below); `ACTION` is `status`, `off`, `on` or `recover`     | no    |
+| `sudo eduwifi-watchdog test`           | Automatic recovery test (see below)                                                                   | yes   |
+| `sudo eduwifi-watchdog` (or `check`)   | The check the timer runs every minute                                                                 | yes   |
+| `eduwifi-watchdog --help`              | Shows all commands and options                                                                        | no    |
 
 `check` also accepts `--dry-run` (report what would be done without changing anything) and
 `--force` (skip straight to reloading the module).
+
+### Desktop menu entry
+
+The installer adds a **Wi-Fi watchdog** entry to the applications menu (category *Internet*),
+shown translated to the desktop language. It can be used in two ways:
+
+- **Click it** to open a small dialog that shows the current state (connected network, or
+  whether the watchdog is paused) and lets you choose an action: show the status and latest
+  events, turn the Wi-Fi off, turn it on, or recover it now.
+- **Right-click it** for the same actions directly, without the dialog: *Show Wi-Fi status*,
+  *Turn Wi-Fi off*, *Turn Wi-Fi on* and *Recover Wi-Fi now*.
+
+Results are shown as desktop notifications. *Recover now* reloads the driver, so it asks for the
+administrator password in a graphical window (`pkexec`); it does nothing while the Wi-Fi is
+paused (turn it on instead). The dialog uses `kdialog` on KDE Plasma and `zenity` elsewhere.
 
 ### How the watchdog knows you disconnected on purpose
 
@@ -197,6 +218,67 @@ If the test fails, it reloads the module and reconnects so you are not left offl
 ```sh
 journalctl -t eduwifi-watchdog -f
 ```
+
+Journal entries are always in English, whatever the desktop language, so they can be searched
+and pasted into bug reports.
+
+## Translations
+
+The command-line messages, the installer, the dialog, the notifications and the menu entry are
+translated with gettext. Available languages:
+
+| Language  | Code          |
+|-----------|---------------|
+| English   | (built in)    |
+| Valencian | `ca@valencia` |
+| Spanish   | `es`          |
+| French    | `fr`          |
+| Bulgarian | `bg`          |
+
+The language follows the session locale (`LANG` / `LANGUAGE`); a Valencian LliureX session
+(`ca_ES.UTF-8@valencia`) gets Valencian, and any language without a translation falls back to
+English. To try another language from a terminal, for example French (`LANGUAGE` is ignored
+when `LANG` is `C` or `POSIX`):
+
+```sh
+LANGUAGE=fr eduwifi-watchdog --help
+```
+
+### How it is organised
+
+```
+po/
+  LINGUAS                 languages to build, one per line
+  eduwifi-watchdog.pot    template with every translatable message
+  ca@valencia.po, es.po…  one translation per language
+  update.sh               regenerates the template and merges it into every .po
+  compile.sh              compiles the .po files and the translated menu entry
+eduwifi-watchdog.desktop.in   menu entry template (translated from the same .po files)
+```
+
+The installer runs `po/compile.sh` and installs the result to `/usr/share/locale` and
+`/usr/share/applications`.
+
+### Adding or improving a translation
+
+1. Add the language code to `po/LINGUAS` (skip this to improve an existing one).
+2. Run `po/update.sh`; it creates `po/<code>.po` or adds any new messages to it.
+3. Translate the `msgstr` entries with a text editor or a tool such as Poedit or Lokalize.
+   Keep every `%s` and **keep them in the same order** (bash `printf` cannot reorder them),
+   and keep the command names (`check`, `status`, `on`…) untranslated.
+4. Check it and test it from the checkout, without installing:
+
+   ```sh
+   msgfmt --check --statistics -o /dev/null po/<code>.po
+   po/compile.sh build
+   LANGUAGE=<code> ./eduwifi-watchdog.sh --help
+   ```
+
+   The script uses `build/locale` automatically when it exists (`build/` is ignored by git).
+5. Open a pull request.
+
+If you change or add a user-visible message in the scripts, run `po/update.sh` and translate
+the new entries before committing.
 
 ## Testing
 
@@ -270,6 +352,24 @@ session.
    applet, wait a few minutes and check `eduwifi-watchdog status`. If it reconnects by itself
    instead of showing `PAUSED`, please open an issue.
 
+6. **Menu entry:** open **Wi-Fi watchdog** from the applications menu; the dialog should show
+   the connected network. Try each action from the dialog and from the right-click menu; each
+   one should end with a desktop notification (*Recover now* asks for the password first).
+
+### Translations
+
+```sh
+po/compile.sh build                                     # builds without installing
+for l in ca@valencia es fr bg; do
+    msgfmt --check --statistics -o /dev/null po/$l.po   # expected: "92 translated messages"
+    LANGUAGE=$l ./eduwifi-watchdog.sh status | head -3  # status in that language
+done
+desktop-file-validate build/eduwifi-watchdog.desktop    # menu entry is valid
+```
+
+After installing, the journal must stay in English whatever the language:
+`journalctl -t eduwifi-watchdog -n 5 -o cat`.
+
 Follow what the watchdog does during any test with `journalctl -t eduwifi-watchdog -f`.
 
 ## Uninstallation
@@ -278,8 +378,9 @@ Follow what the watchdog does during any test with `journalctl -t eduwifi-watchd
 sudo ./install.sh --uninstall
 ```
 
-This disables the timer and removes the script, the `eduwifi-watchdog` command and the systemd
-units. `/etc/eduwifi-watchdog.conf` is kept; delete it manually if you no longer need it.
+This disables the timer and removes the script, the `eduwifi-watchdog` command, the systemd
+units, the menu entry and the translations. `/etc/eduwifi-watchdog.conf` is kept; delete it
+manually if you no longer need it.
 
 ## Tip for Realtek rtw88 adapters
 
@@ -297,7 +398,8 @@ Adjust the module names to your chip (`lsmod | grep rtw88`).
 ## Contributing
 
 Issues and pull requests are welcome, especially reports of other adapters and distributions
-where it works (or doesn't).
+where it works (or doesn't), and new or improved translations (see
+[Adding or improving a translation](#adding-or-improving-a-translation)).
 
 ## License
 

@@ -1,0 +1,27 @@
+[Desktop Entry]
+Type=Application
+Name=Wi-Fi watchdog
+GenericName=Wi-Fi recovery
+Comment=Check the Wi-Fi, turn it on or off, or recover it when the adapter hangs
+Icon=network-wireless
+Exec=eduwifi-watchdog gui
+Terminal=false
+Categories=Network;
+Keywords=wifi;wireless;network;watchdog;
+Actions=status;off;on;recover;
+
+[Desktop Action status]
+Name=Show Wi-Fi status
+Exec=eduwifi-watchdog gui status
+
+[Desktop Action off]
+Name=Turn Wi-Fi off
+Exec=eduwifi-watchdog gui off
+
+[Desktop Action on]
+Name=Turn Wi-Fi on
+Exec=eduwifi-watchdog gui on
+
+[Desktop Action recover]
+Name=Recover Wi-Fi now
+Exec=eduwifi-watchdog gui recover

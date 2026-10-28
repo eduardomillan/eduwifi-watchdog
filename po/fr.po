@@ -1,0 +1,523 @@
+# French translation of eduwifi-watchdog.
+# Copyright (C) 2026 Eduardo Millán
+# This file is distributed under the same license as the eduwifi-watchdog package (MIT).
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: eduwifi-watchdog\n"
+"Report-Msgid-Bugs-To: https://github.com/eduardomillan/eduwifi-watchdog/"
+"issues\n"
+"POT-Creation-Date: 2026-10-28 18:33+0100\n"
+"PO-Revision-Date: 2026-10-28 19:00+0100\n"
+"Last-Translator: Eduardo Millán\n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../eduwifi-watchdog.sh:62
+msgid ""
+"Usage: %s [command] [options]\n"
+"\n"
+"Commands:\n"
+"  check        Check the Wi-Fi and recover it if needed (default; used by "
+"the timer)\n"
+"  status       Show Wi-Fi and watchdog status plus the latest events\n"
+"  disconnect   Disconnect the Wi-Fi manually; the watchdog will not "
+"reconnect until \"on\"\n"
+"  off          Turn the Wi-Fi radio off; stays off (even after reboot) until "
+"\"on\"\n"
+"  on           Turn the Wi-Fi on, re-enable autoconnect and connect to the "
+"networks\n"
+"  test         Simulate a driver hang and verify the watchdog recovers it "
+"(root)\n"
+"  gui [ACTION] Desktop dialog used by the menu entry; ACTION is status, off, "
+"on or recover\n"
+"\n"
+"Options for \"check\":\n"
+"  --dry-run    Only report what would be done, change nothing\n"
+"  --force      Skip straight to reloading the kernel module\n"
+"\n"
+"Configuration: %s"
+msgstr ""
+"Usage : %s [commande] [options]\n"
+"\n"
+"Commandes :\n"
+"  check        Vérifie le Wi-Fi et le rétablit si nécessaire (par défaut ; "
+"utilisé par le minuteur)\n"
+"  status       Affiche l'état du Wi-Fi et du surveillant, ainsi que les "
+"derniers événements\n"
+"  disconnect   Déconnecte le Wi-Fi manuellement ; le surveillant ne le "
+"reconnectera pas avant « on »\n"
+"  off          Éteint la radio Wi-Fi ; reste éteinte (même après "
+"redémarrage) jusqu'à « on »\n"
+"  on           Allume le Wi-Fi, réactive la connexion automatique et se "
+"connecte aux réseaux\n"
+"  test         Simule un blocage du pilote et vérifie que le surveillant le "
+"rétablit (root)\n"
+"  gui [ACTION] Fenêtre de bureau utilisée par l'entrée du menu ; ACTION vaut "
+"status, off, on ou recover\n"
+"\n"
+"Options de « check » :\n"
+"  --dry-run    Indique seulement ce qui serait fait, sans rien modifier\n"
+"  --force      Passe directement au rechargement du module du noyau\n"
+"\n"
+"Configuration : %s"
+
+#: ../eduwifi-watchdog.sh:104 ../eduwifi-watchdog.sh:237
+msgid "[dry-run] %s"
+msgstr "[simulation] %s"
+
+#: ../eduwifi-watchdog.sh:112
+msgid "The \"%s\" command requires root: sudo %s %s"
+msgstr "La commande « %s » nécessite les droits root : sudo %s %s"
+
+#: ../eduwifi-watchdog.sh:139
+msgid "Wi-Fi radio is off"
+msgstr "La radio Wi-Fi est éteinte"
+
+#: ../eduwifi-watchdog.sh:145
+msgid "%s was disconnected manually"
+msgstr "%s a été déconnectée manuellement"
+
+#: ../eduwifi-watchdog.sh:180
+msgid "Latest kernel messages: %s"
+msgstr "Derniers messages du noyau : %s"
+
+#: ../eduwifi-watchdog.sh:186
+msgid "Level 1: reconnecting %s with nmcli (no networks configured)"
+msgstr "Niveau 1 : reconnexion de %s avec nmcli (aucun réseau configuré)"
+
+#: ../eduwifi-watchdog.sh:196
+msgid "Level 1: connecting %s to \"%s\""
+msgstr "Niveau 1 : connexion de %s à « %s »"
+
+#: ../eduwifi-watchdog.sh:206
+msgid "Level 2: no MODULE configured, skipping"
+msgstr "Niveau 2 : aucun MODULE configuré, étape ignorée"
+
+#: ../eduwifi-watchdog.sh:209
+msgid "Level 2: reloading kernel module %s"
+msgstr "Niveau 2 : rechargement du module du noyau %s"
+
+#: ../eduwifi-watchdog.sh:212
+msgid "modprobe -r %s failed"
+msgstr "Échec de modprobe -r %s"
+
+#: ../eduwifi-watchdog.sh:217
+msgid "modprobe %s failed"
+msgstr "Échec de modprobe %s"
+
+#: ../eduwifi-watchdog.sh:227
+msgid "Level 3: no USB_ID configured, skipping"
+msgstr "Niveau 3 : aucun USB_ID configuré, étape ignorée"
+
+#: ../eduwifi-watchdog.sh:231
+msgid "Level 3: USB device %s not found; it must be unplugged physically"
+msgstr ""
+"Niveau 3 : périphérique USB %s introuvable ; il faut le débrancher "
+"physiquement"
+
+#: ../eduwifi-watchdog.sh:234
+msgid "Level 3: software USB reset of %s"
+msgstr "Niveau 3 : réinitialisation USB logicielle de %s"
+
+#: ../eduwifi-watchdog.sh:249
+msgid "Must be run as root (or with --dry-run)"
+msgstr "Doit être exécuté en root (ou avec --dry-run)"
+
+#: ../eduwifi-watchdog.sh:255
+msgid "Paused: %s. Run \"%s on\" to resume."
+msgstr "En pause : %s. Exécutez « %s on » pour reprendre."
+
+#: ../eduwifi-watchdog.sh:263
+msgid "Wi-Fi OK, nothing to do"
+msgstr "Wi-Fi OK, rien à faire"
+
+#: ../eduwifi-watchdog.sh:269
+msgid "Wi-Fi not responding (failure %s/%s), waiting for the next check"
+msgstr ""
+"Le Wi-Fi ne répond pas (échec %s/%s), attente de la prochaine vérification"
+
+#: ../eduwifi-watchdog.sh:274
+msgid "Recovered at level 1"
+msgstr "Rétabli au niveau 1"
+
+#: ../eduwifi-watchdog.sh:280
+msgid ""
+"Limit reached (%s reloads/resets in the last hour); not acting until later"
+msgstr ""
+"Limite atteinte (%s rechargements/réinitialisations au cours de la dernière "
+"heure) ; aucune action avant plus tard"
+
+#: ../eduwifi-watchdog.sh:285
+msgid "Recovered at level 2 (module reload)"
+msgstr "Rétabli au niveau 2 (rechargement du module)"
+
+#: ../eduwifi-watchdog.sh:288
+msgid "Recovered at level 3 (USB reset)"
+msgstr "Rétabli au niveau 3 (réinitialisation USB)"
+
+#: ../eduwifi-watchdog.sh:291
+msgid "Could not recover the Wi-Fi; the adapter must be unplugged physically"
+msgstr ""
+"Impossible de rétablir le Wi-Fi ; il faut débrancher physiquement "
+"l'adaptateur"
+
+#: ../eduwifi-watchdog.sh:298
+msgid "Interface:     %s (%s)"
+msgstr "Interface :    %s (%s)"
+
+#: ../eduwifi-watchdog.sh:298
+msgid "not present"
+msgstr "absente"
+
+#: ../eduwifi-watchdog.sh:299
+msgid "Wi-Fi radio:   %s"
+msgstr "Radio Wi-Fi :  %s"
+
+#: ../eduwifi-watchdog.sh:301
+msgid "Connectivity:  OK (gateway responds)"
+msgstr "Connectivité : OK (la passerelle répond)"
+
+#: ../eduwifi-watchdog.sh:303
+msgid "Connectivity:  NO RESPONSE"
+msgstr "Connectivité : AUCUNE RÉPONSE"
+
+#: ../eduwifi-watchdog.sh:306
+msgid "Watchdog:      PAUSED (%s)"
+msgstr "Surveillant :  EN PAUSE (%s)"
+
+#: ../eduwifi-watchdog.sh:308
+msgid "Watchdog:      active"
+msgstr "Surveillant :  actif"
+
+#: ../eduwifi-watchdog.sh:310
+msgid "Timer:         %s"
+msgstr "Minuteur :     %s"
+
+#: ../eduwifi-watchdog.sh:311
+msgid "Networks:      %s"
+msgstr "Réseaux :      %s"
+
+#: ../eduwifi-watchdog.sh:311
+msgid "(chosen by NetworkManager)"
+msgstr "(choisis par NetworkManager)"
+
+#: ../eduwifi-watchdog.sh:312
+msgid "Module:        %s    USB: %s"
+msgstr "Module :       %s    USB : %s"
+
+#: ../eduwifi-watchdog.sh:312
+msgid "(none)"
+msgstr "(aucun)"
+
+#: ../eduwifi-watchdog.sh:314
+msgid "Latest events:"
+msgstr "Derniers événements :"
+
+#: ../eduwifi-watchdog.sh:320
+msgid ""
+"Disconnected manually by %s; the watchdog will not reconnect until \"on\""
+msgstr ""
+"Déconnecté manuellement par %s ; le surveillant ne le reconnectera pas avant "
+"« on »"
+
+#: ../eduwifi-watchdog.sh:325
+msgid "Wi-Fi radio turned off by %s; it will not reconnect until \"on\""
+msgstr "Radio Wi-Fi éteinte par %s ; aucune reconnexion avant « on »"
+
+#: ../eduwifi-watchdog.sh:329
+msgid "Re-enabling Wi-Fi at the request of %s"
+msgstr "Réactivation du Wi-Fi à la demande de %s"
+
+#: ../eduwifi-watchdog.sh:338
+msgid "Wi-Fi connected: %s"
+msgstr "Wi-Fi connecté : %s"
+
+#: ../eduwifi-watchdog.sh:340
+msgid "Wi-Fi is on but not connected yet; the watchdog will keep trying"
+msgstr ""
+"Le Wi-Fi est allumé mais pas encore connecté ; le surveillant va continuer "
+"d'essayer"
+
+#: ../eduwifi-watchdog.sh:349
+msgid "The test needs MODULE set in %s"
+msgstr "Le test nécessite que MODULE soit défini dans %s"
+
+#: ../eduwifi-watchdog.sh:353
+msgid "Wi-Fi is paused by the user; run \"%s on\" first"
+msgstr ""
+"Le Wi-Fi a été mis en pause par l'utilisateur ; exécutez d'abord « %s on »"
+
+#: ../eduwifi-watchdog.sh:357
+msgid ""
+"Wi-Fi is not working right now; the test must start from a good connection"
+msgstr ""
+"Le Wi-Fi ne fonctionne pas actuellement ; le test doit partir d'une "
+"connexion correcte"
+
+#: ../eduwifi-watchdog.sh:363
+msgid "Test: unloading %s to simulate a hang. The Wi-Fi will drop."
+msgstr ""
+"Test : déchargement de %s pour simuler un blocage. Le Wi-Fi va être coupé."
+
+#: ../eduwifi-watchdog.sh:365
+msgid "The timer is active: waiting up to %ss for it to recover on its own."
+msgstr ""
+"Le minuteur est actif : attente de %s s maximum pour qu'il le rétablisse "
+"tout seul."
+
+#: ../eduwifi-watchdog.sh:367
+msgid "The timer is not active: running the recovery directly."
+msgstr "Le minuteur n'est pas actif : lancement direct du rétablissement."
+
+#: ../eduwifi-watchdog.sh:371
+msgid "Test: simulating a hang (modprobe -r %s)"
+msgstr "Test : simulation d'un blocage (modprobe -r %s)"
+
+#: ../eduwifi-watchdog.sh:373
+msgid "Test: could not unload %s"
+msgstr "Test : impossible de décharger %s"
+
+#: ../eduwifi-watchdog.sh:391
+msgid "Test passed: Wi-Fi recovered in %ss. %s"
+msgstr "Test réussi : Wi-Fi rétabli en %s s. %s"
+
+#: ../eduwifi-watchdog.sh:395
+msgid "Test FAILED: no Wi-Fi after %ss; restoring the module manually"
+msgstr ""
+"Test ÉCHOUÉ : pas de Wi-Fi après %s s ; restauration manuelle du module"
+
+#: ../eduwifi-watchdog.sh:398
+msgid "See: journalctl -t %s --since \"@%s\""
+msgstr "Voir : journalctl -t %s --since \"@%s\""
+
+#: ../eduwifi-watchdog.sh:430
+msgid "Watchdog paused: %s"
+msgstr "Surveillant en pause : %s"
+
+#: ../eduwifi-watchdog.sh:433
+msgid "Wi-Fi connected to \"%s\". Watchdog active."
+msgstr "Wi-Fi connecté à « %s ». Surveillant actif."
+
+#: ../eduwifi-watchdog.sh:435
+msgid "Wi-Fi not connected. The watchdog will try to recover it."
+msgstr "Wi-Fi non connecté. Le surveillant va tenter de le rétablir."
+
+#: ../eduwifi-watchdog.sh:445 ../eduwifi-watchdog.sh:446
+msgid "Wi-Fi status"
+msgstr "État du Wi-Fi"
+
+#: ../eduwifi-watchdog.sh:454
+msgid "Wi-Fi turned off. It will stay off until you turn it on again."
+msgstr "Wi-Fi éteint. Il restera éteint jusqu'à ce que vous le rallumiez."
+
+#: ../eduwifi-watchdog.sh:456
+msgid "Could not turn the Wi-Fi off."
+msgstr "Impossible d'éteindre le Wi-Fi."
+
+#: ../eduwifi-watchdog.sh:461
+msgid "Turning the Wi-Fi on and connecting..."
+msgstr "Allumage du Wi-Fi et connexion..."
+
+#: ../eduwifi-watchdog.sh:463
+msgid "Wi-Fi connected to \"%s\"."
+msgstr "Wi-Fi connecté à « %s »."
+
+#: ../eduwifi-watchdog.sh:465
+msgid "The Wi-Fi is on but not connected yet. The watchdog will keep trying."
+msgstr ""
+"Le Wi-Fi est allumé mais pas encore connecté. Le surveillant va continuer "
+"d'essayer."
+
+#: ../eduwifi-watchdog.sh:472
+msgid "The Wi-Fi is paused. Use \"Turn Wi-Fi on\" instead."
+msgstr "Le Wi-Fi est en pause. Utilisez « Allumer le Wi-Fi »."
+
+#: ../eduwifi-watchdog.sh:475
+msgid "Recovering the Wi-Fi. This may take up to a minute..."
+msgstr "Rétablissement du Wi-Fi. Cela peut prendre jusqu'à une minute..."
+
+#: ../eduwifi-watchdog.sh:479
+msgid "Wi-Fi recovered."
+msgstr "Wi-Fi rétabli."
+
+#: ../eduwifi-watchdog.sh:480
+msgid "Recovery cancelled: administrator authorization is required."
+msgstr ""
+"Rétablissement annulé : l'autorisation de l'administrateur est nécessaire."
+
+#: ../eduwifi-watchdog.sh:481
+msgid "Could not recover the Wi-Fi. Unplug the adapter and plug it in again."
+msgstr ""
+"Impossible de rétablir le Wi-Fi. Débranchez l'adaptateur et rebranchez-le."
+
+#: ../eduwifi-watchdog.sh:493 ../eduwifi-watchdog.sh:501
+msgid "Show status and latest events"
+msgstr "Afficher l'état et les derniers événements"
+
+#: ../eduwifi-watchdog.sh:494 ../eduwifi-watchdog.sh:502
+msgid "Turn Wi-Fi off"
+msgstr "Éteindre le Wi-Fi"
+
+#: ../eduwifi-watchdog.sh:495 ../eduwifi-watchdog.sh:503
+msgid "Turn Wi-Fi on"
+msgstr "Allumer le Wi-Fi"
+
+#: ../eduwifi-watchdog.sh:496 ../eduwifi-watchdog.sh:504
+msgid "Recover now (asks for the password)"
+msgstr "Rétablir maintenant (demande le mot de passe)"
+
+#: ../eduwifi-watchdog.sh:499
+msgid "Action"
+msgstr "Action"
+
+#: ../eduwifi-watchdog.sh:506
+msgid "No graphical session or dialog tool (kdialog or zenity) available."
+msgstr ""
+"Aucune session graphique ni outil de dialogue (kdialog ou zenity) disponible."
+
+#: ../install.sh:34
+msgid ""
+"Usage: sudo %s [options]\n"
+"\n"
+"Installs eduwifi-watchdog, enables its systemd timer and adds a menu entry.\n"
+"Requires root. Without options it asks for the settings interactively.\n"
+"\n"
+"Options:\n"
+"  --networks \"Net1,Net2\"   NetworkManager profiles to retry, comma-"
+"separated,\n"
+"                           in priority order (skips the networks question)\n"
+"  --uninstall              Remove the script, the systemd units, the menu "
+"entry\n"
+"                           and the translations (keeps %s)\n"
+"  -h, --help               Show this help"
+msgstr ""
+"Usage : sudo %s [options]\n"
+"\n"
+"Installe eduwifi-watchdog, active son minuteur systemd et ajoute une entrée "
+"au menu.\n"
+"Nécessite les droits root. Sans option, demande les paramètres de façon "
+"interactive.\n"
+"\n"
+"Options :\n"
+"  --networks \"Net1,Net2\"   Profils NetworkManager à réessayer, séparés par "
+"des virgules,\n"
+"                           par ordre de priorité (évite la question sur les "
+"réseaux)\n"
+"  --uninstall              Supprime le script, les unités systemd, l'entrée "
+"du menu\n"
+"                           et les traductions (conserve %s)\n"
+"  -h, --help               Affiche cette aide"
+
+#: ../install.sh:62
+msgid "This installer requires root. Run it with: sudo %s"
+msgstr "Cet installateur nécessite les droits root. Lancez-le avec : sudo %s"
+
+#: ../install.sh:73
+msgid ""
+"Uninstalled. The configuration %s was kept (delete it manually if you want)."
+msgstr ""
+"Désinstallé. La configuration %s a été conservée (supprimez-la manuellement "
+"si vous le souhaitez)."
+
+#: ../install.sh:103
+msgid "== eduwifi-watchdog configuration =="
+msgstr "== Configuration d'eduwifi-watchdog =="
+
+#: ../install.sh:104
+msgid "Wi-Fi interface"
+msgstr "Interface Wi-Fi"
+
+#: ../install.sh:105
+msgid "Kernel module to reload (empty = none)"
+msgstr "Module du noyau à recharger (vide = aucun)"
+
+#: ../install.sh:106
+msgid "USB adapter ID vendor:product (empty = no USB reset)"
+msgstr ""
+"Identifiant USB de l'adaptateur fabricant:produit (vide = pas de "
+"réinitialisation USB)"
+
+#: ../install.sh:109
+msgid "Wi-Fi networks saved in NetworkManager:"
+msgstr "Réseaux Wi-Fi enregistrés dans NetworkManager :"
+
+#: ../install.sh:114
+msgid "Networks to retry, comma-separated, in priority order"
+msgstr "Réseaux à réessayer, séparés par des virgules, par ordre de priorité"
+
+#: ../install.sh:123
+msgid "Warning: \"%s\" is not a NetworkManager profile"
+msgstr "Attention : « %s » n'est pas un profil NetworkManager"
+
+#: ../install.sh:156
+msgid ""
+"Warning: msgfmt not found (package gettext); installed without translations."
+msgstr ""
+"Attention : msgfmt introuvable (paquet gettext) ; installé sans traductions."
+
+#: ../install.sh:164
+msgid "Configuration saved to %s:"
+msgstr "Configuration enregistrée dans %s :"
+
+#: ../install.sh:169
+msgid ""
+"Menu entry: \"Wi-Fi watchdog\" (right-click it for quick actions).\n"
+"\n"
+"Useful commands:\n"
+"  eduwifi-watchdog status             status and latest events\n"
+"  eduwifi-watchdog disconnect         disconnect manually (the watchdog will "
+"not reconnect)\n"
+"  eduwifi-watchdog off                turn the Wi-Fi off until you turn it "
+"back on\n"
+"  eduwifi-watchdog on                 turn on and reconnect\n"
+"  eduwifi-watchdog gui                open the desktop dialog\n"
+"  sudo eduwifi-watchdog test          simulate a hang and verify it "
+"recovers\n"
+"  journalctl -t eduwifi-watchdog -f   follow the log"
+msgstr ""
+"Entrée du menu : « Surveillance du Wi-Fi » (clic droit pour les actions "
+"rapides).\n"
+"\n"
+"Commandes utiles :\n"
+"  eduwifi-watchdog status             état et derniers événements\n"
+"  eduwifi-watchdog disconnect         déconnecter manuellement (le "
+"surveillant ne reconnectera pas)\n"
+"  eduwifi-watchdog off                éteindre le Wi-Fi jusqu'à ce que vous "
+"le rallumiez\n"
+"  eduwifi-watchdog on                 allumer et reconnecter\n"
+"  eduwifi-watchdog gui                ouvrir la fenêtre de bureau\n"
+"  sudo eduwifi-watchdog test          simuler un blocage et vérifier le "
+"rétablissement\n"
+"  journalctl -t eduwifi-watchdog -f   suivre le journal"
+
+#: ../eduwifi-watchdog.desktop.in:4
+msgid "Wi-Fi watchdog"
+msgstr "Surveillance du Wi-Fi"
+
+#: ../eduwifi-watchdog.desktop.in:5
+msgid "Wi-Fi recovery"
+msgstr "Rétablissement du Wi-Fi"
+
+#: ../eduwifi-watchdog.desktop.in:6
+msgid ""
+"Check the Wi-Fi, turn it on or off, or recover it when the adapter hangs"
+msgstr ""
+"Vérifier le Wi-Fi, l'allumer ou l'éteindre, ou le rétablir quand "
+"l'adaptateur se bloque"
+
+#: ../eduwifi-watchdog.desktop.in:11
+msgid "wifi;wireless;network;watchdog;"
+msgstr "wifi;sans fil;réseau;surveillance;watchdog;"
+
+#: ../eduwifi-watchdog.desktop.in:15
+msgid "Show Wi-Fi status"
+msgstr "Afficher l'état du Wi-Fi"
+
+#: ../eduwifi-watchdog.desktop.in:27
+msgid "Recover Wi-Fi now"
+msgstr "Rétablir le Wi-Fi maintenant"
