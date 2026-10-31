@@ -14,7 +14,7 @@ Each check (once per minute) considers the Wi-Fi healthy when the interface exis
 NetworkManager reports it as connected, and the default gateway answers a ping.
 
 After `FAILS_NEEDED` consecutive failed checks (2 by default, i.e. about two minutes, so short
-glitches are ignored), it escalates, re-checking after every step:
+glitches are ignored), it escalates, re-checking after every step. These are the recovering **levels**:
 
 1. **Reconnect** to the configured networks, one by one, in priority order
    (`nmcli connection up`). With no networks configured, NetworkManager picks one.
